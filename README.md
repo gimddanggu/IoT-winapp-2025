@@ -237,7 +237,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
 
 ### C# 문법
 - 기본 문법 - C++, Java와 거의 동일. C++과의 차이점만 비교
-    1. 자료구조 및 주석
+    1. 자료구조 및 주석 - [소스](./day02/Day02Study/ConsoleApp2/Program.cs)
         - 네임스페이스, 클래스, 메서드
 
         ```cs
@@ -265,7 +265,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
             }
         }
         ```
-    2. 자료형 및 변수, Nullable
+    2. 자료형 및 변수, Nullable - [소스](./day02/Day02Study/SyntaxWinapp01/FrmMain.cs)
         - 변수 사용은 C++과 유사
         - 자료형도 C++과 유사, 닷넷타입은 차이가 있음
         - 닷넷타입은 여러 언어에서 공통으로 사용하긱 위해 추가된 기능
@@ -275,10 +275,10 @@ IoT 개발자 C#/WinApp 리포지토리 2025
             - 초기화가 반드시 필요하며, 초기화된 값의 타입으로 고정.
             - 타입이 한 번 정해지면 이후 다른 타입의 값을 대입불가.
 
-    3. 연산자
+    3. 연산자 - [소스](./day02/Day02Study/SyntaxWinApp02/FrmMain.cs)
         - C, C++과 동일! 패스!!
 
-    4. 분기문, 반복문
+    4. 분기문, 반복문 - [소스](./day02/Day02Study/SyntaxWinApp03/FrmMain.cs)
         - if 문
         - switch 문
         - for 문
@@ -286,6 +286,9 @@ IoT 개발자 C#/WinApp 리포지토리 2025
         - while 문
 
 ## 3일차 
+### 한글문제
+- 콘솔 > Programe.cs : UTF8 BOM 저장
+- 윈앱 > FrmMain.cs : EUC-KR(CP949) -> 깃헙에서 한글이 깨져서 나옴
 ### C# 문법
 - 기본문법
     1. 문자열 처리
