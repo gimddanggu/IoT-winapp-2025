@@ -9,7 +9,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
     - ASP.NET 및 웹 개발, .NET 데스크톱 개발 - 필수
     - .NET Multi-Platform App UI 개발 - 옵션
 
-    <img src="./image/cs001.png" width="700">
+    <img src="./image/cs0001.png" width="700">
 
 ### C# 학습
 
@@ -174,7 +174,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
     - 폼 디자인의 컨트롤 이벤트와 로직 코드 상의 이벤트 처리 메서드 생성 상 불일치로 발생
     - 이벤트 이름은 생성되고, 이벤트 정의 메서드는 생성이 안되서
 
-    <img src="./image/cs002.png" width="600">
+    <img src="./image/cs0002.png" width="600">
 
     - FormMain.Designer.cs 파일 오픈
     - Windows Form Designer generated code를 확장
@@ -286,7 +286,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
         - for eachs는 컬렉션에서..
         - while 문
 
-        <img src="./image/cs003.png" width="600">
+        <img src="./image/cs0003.png" width="600">
 
 ## 3일차
 
@@ -490,7 +490,11 @@ IoT 개발자 C#/WinApp 리포지토리 2025
 
         <img src="./image/cs0007.png" width="600">
         
-        https://github.com/user-attachments/assets/2aafb574-aebb-4703-94b1-dde4c8f4228b
+
+
+        https://github.com/user-attachments/assets/537e943c-c230-46f3-a92e-872d4eb4efb6
+
+
 
     3. 컬렉션 - [소스](./day04/Day04Study/SyntaxWinApp02/FrmMain.cs)
         - 배열, 리스트, 딕셔너리, 큐, 스택 등 여러데이터를 저장하고 다루는 구조를 가진 객체를 통칭
