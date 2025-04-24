@@ -9,7 +9,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
     - ASP.NET 및 웹 개발, .NET 데스크톱 개발 - 필수
     - .NET Multi-Platform App UI 개발 - 옵션
 
-    <img src="./image/cs001.png" width="700">
+    <img src="./image/cs0001.png" width="700">
 
 ### C# 학습
 
@@ -174,7 +174,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
     - 폼 디자인의 컨트롤 이벤트와 로직 코드 상의 이벤트 처리 메서드 생성 상 불일치로 발생
     - 이벤트 이름은 생성되고, 이벤트 정의 메서드는 생성이 안되서
 
-    <img src="./image/cs002.png" width="600">
+    <img src="./image/cs0002.png" width="600">
 
     - FormMain.Designer.cs 파일 오픈
     - Windows Form Designer generated code를 확장
@@ -286,7 +286,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
         - for eachs는 컬렉션에서..
         - while 문
 
-        <img src="./image/cs003.png" width="600">
+        <img src="./image/cs0003.png" width="600">
 
 ## 3일차
 
@@ -491,6 +491,10 @@ IoT 개발자 C#/WinApp 리포지토리 2025
         - 예외클래스를 모르겠다 싶으면 Exception으로 처리
 
         <img src="./image/cs0007.png" width="600">
+
+
+
+        https://github.com/user-attachments/assets/3c41173a-a3a7-4971-933c-c0d9d3a76ed4
 
 
 
