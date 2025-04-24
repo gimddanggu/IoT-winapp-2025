@@ -9,7 +9,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
     - ASP.NET 및 웹 개발, .NET 데스크톱 개발 - 필수
     - .NET Multi-Platform App UI 개발 - 옵션
 
-    <img src="./image/cs0001.png" width="700">
+    <img src="./image/cs001.png" width="700">
 
 ### C# 학습
 
@@ -174,7 +174,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
     - 폼 디자인의 컨트롤 이벤트와 로직 코드 상의 이벤트 처리 메서드 생성 상 불일치로 발생
     - 이벤트 이름은 생성되고, 이벤트 정의 메서드는 생성이 안되서
 
-    <img src="./image/cs0002.png" width="600">
+    <img src="./image/cs002.png" width="600">
 
     - FormMain.Designer.cs 파일 오픈
     - Windows Form Designer generated code를 확장
@@ -286,7 +286,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
         - for eachs는 컬렉션에서..
         - while 문
 
-        <img src="./image/cs0003.png" width="600">
+        <img src="./image/cs003.png" width="600">
 
 ## 3일차
 
@@ -431,14 +431,15 @@ IoT 개발자 C#/WinApp 리포지토리 2025
     - 나머지는 Button과 동일
     - Minimum : 입력할 수 있는 최소값
     - Maximum : 최대값
-    - Value : 현재값
+    - Value : 현재 값
     - 이벤트 생성 거의 안함
+    
 
 - `RichTextBox` : 포맷팅이 가능한 텍스트박스
     - MS Word, 한글워드프로세서 같은 문장 꾸미기, 페이지 꾸미기가 가능
     - Rtb~ 로 시작
     - ScrollBars : 컨트롤 오른쪽, 하단에 스크롤바 생성
-        - Both 보다는 ForcedBoth, ForcedVertical 사용
+        - Both 보다는 ForceBoth, ForcedVertical  사용
     - WordWrap : 컨트롤 길이를 넘어가면 자동으로 줄바꿈 여부
 
 - `OpenFileDialog` : 읽을 파일 위치와 파일을 선정하는 다이얼로그 창 컨트롤
@@ -450,18 +451,20 @@ IoT 개발자 C#/WinApp 리포지토리 2025
     - DlgSave 이름으로 사용
     - 코딩으로 설정내용 작성
 
-- `ColorDialog` : 색상 선택하는 다이얼로그 컨트롤
+- `ColorDialog` : 색상 선택하는 다이얼로그 컨트롤 
     - DlgColor 이름사용
-    - 코딩으로 설정내용 작성
+    
 
 
 - 대부분 컨트롤 속성
     - Anchor : 현재 컨트롤을 폼의 사이즈가 조정될 때 어디에 고정시키는지 설정
         - 왼쪽 상단에 있는 컨트롤 : 보통 Left, Top
         - 오른쪽 하단에 있는 컨트롤 : 보통 Right, Bottom
+    
     - Dock : 어디 도킹시키는지 설정
-        - Top, Left, Right, Bottom, Fill 
+        - Top, Left, Right, Bottom, Fill
         - 보통 컨테이너 컨트롤용으로 사용
+- 콛
     - Anchor와 Dock 같이 사용해서 디자인
     - Font : 대표적인 폰트 사용할 것
         - 폼에서 변경하면 하위 컨트롤은 같이 변경
@@ -469,35 +472,30 @@ IoT 개발자 C#/WinApp 리포지토리 2025
 ### VS 개발팁
 - 코드조각(Code Snippet)을 최대한 활용(코딩양 줄임, 오타 예방)
 - 보기 > 개체 브라우저에서 필요한 클래스 검색
-- 소스코드가 회색으로 연하게 변하는 것 > 되도록이면 사용을 피하라는 뜻 > Alt+Enter로 변경권장사항 확인
+- 소스코드가 회색으로 연하게 변하는 것 > 되도록이면 사용을 피하라는 뜻 > Alt + Enter로 변경 권장사항 확인
 
 ### C# 문법
 - 기본분법
-    1. 형변환 - [소스](./day04/Day04Study/SyntaxWinApp01/FrmMain.cs)
-        - 큰바이트 데이터형에 작은바이트 데이터형 값을 할당하면 문제없이 사용가능(묵시적 형변환)
-        - `작은바이트 데이터형에 큰바이트 데이터형을 할당하면 문법적 오류` -> (명시적 형변환)
-        - 명시적 형변환 : 실행중 예외발생은 개발자의 책임!!
-        - 값 타입별 .parse(string) : 문자열을 해당 타입으로 변환
-        - .TryParsse() : 추후 진행예정
+    1. 형변환 
+        - 큰바이트 데이터형에 작은 바이트 데이터형 값을 할당하면 문제없이 사용가능(묵시적 형변환)
+        - 작은 바이트 데이터형에 큰바이트 데이터형을 할당하면 문법적 오류 -> (명시적 형변환)
+        - 명시적 형변환 : 실행 중 예외발생은 개발자의 책임!!
+        - 값 타입별 .Parse(string) : 문자열을 해당 타입으로 변환
+        - `.TryParsse()` : 추후 진행예정
         - Convert 클래스 사용 추천. 여러 타입을 다 변환가능
-            - Convert.ToInt32()
-
-    2. 예외처리
-        - 실행중 비상종료를 막기위해서
+            - `Convert.ToInt32()`
+    2. 예외처리 - [소스](./day04/Day04Study/SyntaxWinApp01/FrmMain.cs)
+        - 실행 중 비정상종료를 막기 위해서
         - try ~ catch ~ finally 구문으로 처리
         - 모든 예외의 부모클래스는 Exception 클래스
         - 예외클래스를 모르겠다 싶으면 Exception으로 처리
 
         <img src="./image/cs0007.png" width="600">
-        
-
-
-        https://github.com/user-attachments/assets/537e943c-c230-46f3-a92e-872d4eb4efb6
 
 
 
     3. 컬렉션 - [소스](./day04/Day04Study/SyntaxWinApp02/FrmMain.cs)
-        - 배열, 리스트, 딕셔너리, 큐, 스택 등 여러데이터를 저장하고 다루는 구조를 가진 객체를 통칭
+        - 배열, 리스트, 딕셔너리, 큐, 스택 등 여러 데이터를 저장하고 다루는 구조를 가진 객체를 통칭
 
         - 배열로 콤보박스에 데이터 할당
         - 리스트로 콤보박스 데이터 할당
@@ -505,7 +503,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
 
         <img src="./image/cs0009.png" width="600">
 
-    4. 파일입출력 - [소스](./day04/Day04Study/SyntaxWinApp03/FrmMain.cs)
+    4. 파일입출력
         - 파일 쓰기, 읽기 기능
         - SaveFileDialog, OpenFileDialog, ColorDialog 컨트롤 사용
 
@@ -513,19 +511,164 @@ IoT 개발자 C#/WinApp 리포지토리 2025
 
 ## 5일차
 
+### 윈앱 컨트롤 4
+- `StatusStrip` : 상태표시줄 컨트롤, 서브 컨트롤 추가 가능
+    - 이름은 거의 변경 안 함. 서브 컨트롤 이름을 변경
+    - `StatusLabel` : 글자만 표시, Lbl~ 로 사용
+    - `ProgressBar` : 진행바 표시, Prg~ 이름 시작
+    - `DropDownButton` : 드롭다운버튼, 이벤트 추가
+    - `SplitButton` : 버튼
+    - `SizingGrip` : 오른쪽 하단의 사이즈조절 아이콘 표시
+
+### VS 사용팁
+- 소스코드 들여쓰기 문제가 발생하면 > 편집 > 고급 > 문서서식 클릭
 ### C# 문법
 - 기본 문법
-    1. 델리게이트, 이벤트
-    2. 람다식
-    3. LINQ
-    4. 비동기, 스레드
-    5. 속성
-    6. 제네릭
+    1. 델리게이트(대리자), 이벤트 - [소스](./day05/Day05Study/SyntaxWinApp01/FrmMain.cs)
+        - **대리자** : 메서드를 변수처럼 저장하고 호출할 수 있는 타입
+            - C++ 함수포인터, 파이썬 콜백함수
+        - 대리자는 실행 메서드를 들고 있고, 대리자를 호출하면 대리자가 메서드를 대신 호출해줌
+        - 대리자는 호출할 메서드와 파라미터가 일치해야 함
+        - 윈폼에서 버튼을 클릭하면, 직접 메서드를 호출하는게 아니고, C#이 사용자의 움직임을 체크하고 있다가 클릭**이벤트가 발생하면 그에 해당하는 메서들르 대신 실행(호출)시켜주는 것**
 
+        - 대리자의 장점
+            - 메서드를 변수처럼 저장 
+            - 런타임 시 메서드를 바꿀 수 있음
+            - 하나의 대리자가 여러 개의 메서드를 호출할 수 있음
+
+        - Action, Func, Predicate
+            - 대리자 생략형
+
+        - **이벤트** : 대리자의 특별한 형태. 어떤 일이 발생하면 연결된 메서드 호출하는 것, PyQt의 `시그널`과 동일
+            - 윈앱 버튼클릭, 마우스드래그, 타이머종료
+            - 모바이, 윈앱, 웹앱 개발 모두 이벤트 덩어리 집합
+
+        - 메서드 -> 대리자 -> 이벤트 -> 사용자가 연결해서 동작시킴
+        - delegate: 메서드를 저장하고 실행하는 타입
+        - event : delegate에게 **무슨 일이 발생하면 실행해!**라고 해주는 역할
+        - `+=`, `-=` : 이벤트 구독(이벤트 핸들러 연결), 이벤트 구독 해제
+
+        - 자주 쓰이는 이벤트
+            - Form_Load - 아래에 설명
+            - Button_Click
+            - TextBox_KeyPress - 생략
+            - ComboBox_SelectedIndexChanged -  생략
+
+        - Form 오픈 이벤트 및 생성자
+            1. FrmMain 생성자
+                - InitializeComponent() 객체(컨트롤)변수 초기화
+            2. `FrmMain_Load` 이벤트 : Form이 로드(메모리 업)될 때 처리할 내용
+                - 생성자 이외에 초기화 할 것 
+                - Form 오픈 시 이베느 중에서 가장 중요!!
+            - FrmMain_Activated 이벤트 : Form이 활성화(바탕화면 가장 위에서 동작하는 상태) 될 때 처리될 이벤트
+            - FrmMain_Shown 이벤트 : Form이 바탕화면에 그려질 때 이벤트
+                - 잘 안씀
+
+
+        - Form 클로즈 이벤트
+            - FrmMain_FormClosing 이벤트 : Form이 닫히는 도중 이벤트
+            - FrmMain_FormClosed 이벤트 : Form이 완전히 닫힌 뒤 이벤트
+
+        - 실제 실무에서는
+            - FrmMain() 생성자, FrmMain()_Load(), FrmMain_FormClosing()으로 대부분 작업
+
+        <img src="./image/cs0011.png" width="600">
+
+- 고급 문법   
+    1. 람다식 - C# 3.0 부터 도입 - [소스](./day05/Day05Study/SyntaxWinApp02/FrmMain.cs)
+        - 간단한 메서드를 한 줄로 표현하는 문법
+        - 코드를 간결하게 작성하고 싶을 때 사용
+    2. LINQ - C# 3.0 부터 도입
+        - Language Integrated Query : 언어에 통합된 쿼리
+        - Database 학습 SQL과 유사
+        - 데이터를 SQL처럼 Query 할 수 있는 문법
+    
+    3. 속성 - Property
+        - 객체지향 클래스에서 멤버변수(명사) 중 public 변수
+        - 첫번째 글자 대문자
+        - `{get; set;}` 형태로 구성
+        - 일반 클래스 : 객체 데이터 저장, 상태 표현
+            - 코드로만 작성
+        - UI 클래스(속성) : UI 상태나 외형, 기능 컨트롤
+            - 폼 디자인, 코드 둘 다 사용
+        - Form.Designer.cs 내용은 폼 디자인에서 마우스나 디자인 설정에 변하는 값으로 되도록이면 수정하지 말 것
+        - Form_Load 이벤트에 코딩으로 초기화
+
+    4. partial 클래스
+        - 나누어진 같은 이름의 클래스를 컴파일 시 하나로 합쳐주는 기능
+        - 디자인에 관련도니 소스코드는 *.Designer.cs로 분리
+        - 기능에 필요한 소스코드만 *.cs로 분리
+        ```cs
+        // 1. FrmMain.cs
+        public partial class FrmMain : Form
+        {   
+
+        // 2. FrmMain.Designer.cs
+        partial class FrmMain
+        {
+            
+        // 3. FrmMain.resx 특이ㅔ이스
+        ```
+    5. 제네릭
+        - 파이썬에는 필요없음 -> 타입지정이 자유로움
+        - Java, C# 등의 엄격한 데이터타입 객체지향언어에 반드시 필요
+        - 제네릭 메서드
+        - 제너릭이 없으면,
+        - 실제, Console.cs의 WriteLine()이 증거
+
+        ```cs
+        public void PrintInt(int data) {Console.WriteLine(data); }
+        public void PrintString(string data) {Console.WriteLine(data); }
+        public void PrintFloat(float data) {Console.WriteLine(data); }
+        ```
+
+        - 제너릭이 있으면,
+        ```cs
+        public void Print<T>(T data) {Console.WriteLine(data); }
+        ```
+        - 위 3개의 메서드를 아래의 하나의 메서드로 퉁칠 수 있음
+        - 대문자 T는 아무거나 사용해도 무방. 대문자 한 글자를 선호
+
+        - 제네릭 클래스
+        - where T : class -> 참조형(클래스)만 허용
+        - where T : struct -> 값 형식(기본 타입)만 허용
+        - where T : new() -> 매개변수 없는 생성자 필요
+        - where T : BaseClass -> 특정 클래스, 인터페이스 상속 필수
+
+        <img src="./image/cs0012.png" width="600">
+
+    6. 비동기, 스레드 - [소스](./day05/Day05Study/SyntaxWinApp03/FrmMain.cs)
+        - UI 프로그램에 `응답없음` 발생
+        - 멀티프로세스 - 한꺼번에 여러 개의 프로세스를 실행
+        - 스레드 - 프로세스에서 여러 일을 한꺼번에 수행하기 위해 분리한 업무단위
+        - 멀티스레드 - 한 프로세스에서 여러 스레드 동작하는 것
+        - 응답없음이 발생하면 프로그램의 신뢰도가 떨어짐
+        - 윈앱 - 싱글 스레드(UI가 스레드를 제어)
+        - 콘솔에는 실시간 출력, 텍스트 박스, 프로그래스 바 등 컨트롤 ㅛ시가 실시간으로 안됨
+
+        - 첫 번째 해결방법
+            - Application.DoEvents() 메서드 추가. 권장 x
+        - `두 번째` 해결방법
+            - 비동기 `async`, `await` 키워드로 해결
+        - 세 번째 해결방법
+            - 전통적인 스레드 사용. 권장x
+        - `네 번째` 해결방법 - 내일 처리
+            - BackgroundWorker 클래스 사용
+        
+        <img src="./image/cs0013.png" width="600">
+        
 ## 6일차
+### C# 마지막
+- C# 고급
+    1. 비동기 스레드
+        - backgroundWorker 클래스 사용
+### WimForms 추가
+- 추가 내용
+    - Form_Load 이벤트
 
-### C# 응용 - WPF
-- WPF 기본
+
+## 7일차
+### C#응용 - WPF
 
 
 ## 10일차
