@@ -757,15 +757,183 @@ IoT 개발자 C#/WinApp 리포지토리 2025
 
     <img src=".//image/cs0014.png" width="800">
 
-## 7일차(04.28)
+## 7일차
 
 ### C# 응용 - WPF
-- WPF 기본 
+- WPF 개요
+    - `Windows Presentation Foundation` 약자. 윈도우에서 표시하기위한 기초
+    - 윈앱(윈폼즈)을 개선한 버전. 이미지 표현이 비트맵방식(2D). 용량문제, 계단현상 문제가 존재
+    - 비트맵방식의 문제를 해결 -> 벡터방식(텍스트). 속도개선, 용량절약
+
+- WPF 특징
+    - WPF UI 디자인에는 이미지 `벡터`방식 사용. 비트맵방식도 혼용가능
+    - `XAML` : xml기반의 디자인 문법으로 화면 UI를 디자인. PyQt와 동일
+        - 안드로이드 등 모바일 개발, 자바 FX, Qt디자인 등 화면 UI의 최신 트렌드
+    - HTML로 디자인하던 디자이너가 손쉽게 적용할 수 있음
+    - 백엔드는 C# 윈앱과 거의 동일, 프론트엔드만 차이
+        - 윈앱과는 다르게 코딩으로 디자인을 수행. 윈앱처럼 디자이너 사용 가능
+        - 디자이너 -> Blend for Visual Studio 디자인툴 사용
+        - 개발자 -> VS에거 코딩으로 디자인
+
+    <img src="./image/cs0017.png" width="400">
+    
+- XAML 
+    - `eXtensible Application Markup Language` : XML 기반 언어
+    - WPF(Windows), UWP(Win, Linux, MacOS), MAUI(모바일) 동일하게 사용
+    - 태그형태로 디자인. <열린태크></닫힌태그>, <태그내 다른 태그없을때 />
+    ```xml
+    <Window x:Class="ex01_wpf_start.MainWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:local="clr-namespace:ex01_wpf_start"
+            mc:Ignorable="d"
+            Title="MainWindow" Height="450" Width="800">
+        <Grid>
+            <Button x:Name="BtnClick" Content="CLICK" FontSize="40" FontFamily="NanumGothic" FontWeight="Bold" Click="BtnClick_Click" />
+        </Grid>
+    </Window>
+    ```
+
+- 각 프레임워크별 장점
+    - 윈앱(윈폼) - 오래된 기술로 안정적. 상용/무료 서드파티 컨트롤이 많이 존재. 혼자 UI 개발할 때는 시간절약
+    - WPF 
+        - 비교적 최신기술. UI개발을 코딩으로 가능
+        - MS가 출시하는 대부분의 윈앱이 WPF로 개발
+        - UI 디자인이 매우 세련됨. 키오스크 등 개발에 많이 활용
+        - 디자인 감각만 있으면 직접 컨트롤 제작이 용이
+        - 디자이너와 개발자의 업무를 분리작업이 쉬움
+        - GPU를 사용해서 GUI 렌더링을 해서 윈앱보다 성능이 뛰어남
+        - 모바일, UWP 등도 동일하게 개발 가능
+
+- WPF 컴포넌트(실무에서 쓰이는 UI컴포넌트, 윈앱도 존재) - Third Party
+    - (상용)텔레릭 - https://www.telerik.com/ 
+    - (상용)데브익스프레스 - https://www.devexpress.com/
+    - (상용)인프라지틱스 - https://www.infragistics.com/
+    - **(무료)마하앱** - https://mahapps.com/
+
+### WPF 개발방법 및 컨트롤 1
+- **WPF 애플리케이션** 선택  - [소스](./day07/Day07Study/WpfStudyApp01/MainWindow.xaml.cs)
+    - 나머지는 동일
+
+- WPF 프로젝트 구조
+    - 종속성 : 필요한 라이브러리 관리
+        - NuGet Package로 외부라이브러리 설치
+    - App.xaml : 앱 실행을 관리하는 리소스
+        - App.xaml.cs : 비하인드 C# 코드
+        - 윈앱에 Program.cs와 동일
+    - MainWindow.xaml : Form1.Designer.cs와 동일한 디자인 파일
+        - MainWindow.xaml.cs : Form1.cs 소스코드와 동일
+
+- WPF 기본개발은 윈앱과 거의 일치
+
+- WPF 실제개발법(XAML) - [소스](./day07/Day07Study/WpfStudyApp02/MainWindow.xaml)
+    - Window : 전체 partial 클래스
+        - MainWindow.xaml.cs와 컴파일시 하나로 통합
+    - UI작업, 레이아웃 설계부터 시작
+    - **Grid** 컨트롤 : WPF에서 가장 많이 사용하는 레이아웃(중요!)
+        - 내부에 위치하는 컨트롤이 그리를 채워서 표시
+        - `Grid.Row`, `Grid.Column` : 그리드 상 컨트롤 위치할 행과 열 인덱스
+        - Margin : 외부여백
+            - 10 : 전체다 10의 공백을 여백
+            - 10, 20 : 왼쪽/오른쪽 여백, 위/아래 여백
+            - 10, 5, 20, 30 : 왼쪽, 위, 오른쪽, 아래 여백
+        - Padding : 컨트롤 내부여백
+        - 디자인할 창의 구역을 나눌때 사용
+
+        ```xml
+        <!-- Xaml에서 화면구역 나누기  -->
+        <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+        <Grid.RowDefinitions></Grid.RowDefinitions>
+        ```
+        - Widht/Height * : 배수
+        - ColumnDefinition - Width에 숫자 + *
+        - RowDefinition - Height에 숫자 + *
+        - 숫자만 사용하면 크기 픽스
+        - Row, Column를 세 부분으로 나눈뒤
+        - 중앙 외는 고정된 값으로 지정
+        - 외부 Grid와 내부 Grid로 나눠서 작업 수행
+
+        <img src="./image/cs0015.png" width="600">
+
+    - Responsive UI 사용 - WPF의 기본 디자인 정책
+
+    - `StackPanel` : 스택처럼 컨트롤을 쌓는 레이아웃
+        - `Orientation` : Vertical(기본), Horizontal
+        - Padding 이 없음. 내부 컨트롤에 Margin 처리
+
+    - DockPanel : 윈앱 Dock 속성과 동일
+        - `DockPanel.Dock` : Left, Right, Top, Bottom
+
+    - WrapPanel : 넓이 영역을 벗어나면 아래로 위치되는 레이아웃
+        - 왼쪽부터 오르쪽으로 컨트롤 위치
+        - 컨트롤 길이가 전체 넓이를 벗어나면 아래로 위치
+
+    - `Canvas` : 컨트롤 자체 좌표를 제공하는 레이아웃
+        - Canvas.Left, Right, Top, Bottom : 위치 
+    
+- 데이터바인딩 - [디자인](./day07/Day07Study/WpfStudyApp04/MainWindow.xaml), [소스](./day07/Day07Study/WpfStudyApp04/MainWindow.xaml.cs)
+    - 바인딩 방법
+        1. 컬렉션을 생성해서 데이터를 컨트롤에 할당
+        2. DB에서 데이터 가져온뒤 컨트롤에 할당
+    - 바인딩 방식
+        1. 직접코드 할당방식 
+            - CboCollection.ItemsSource = fruitItems
+            - 기존 윈앱 방식과 동일
+            - 메모리에 있는 fruitItems 데이터를 대입(할당)
+            - DataContext와 관계 없음
+            - 단순한 속성 사용방식
+        2. XAML Binding방식 : MVVM 디자인패턴시 필수
+            - {Binding fruitItems}
+            - DataContext 기반으로 속성명 fruitItems를 검색
+            - DataContext에 없으면 실패
+            - BindingManager이 작업을 수행
+            - DataContext는 컨트롤 자체에 할당해도 됨
+
+    - ItemsSource : 각 컨트롤이 데이터를 바인딩하는 속성
+    - DataContext : Xaml이 데이터를 어디에서 가져오는지 설정하는 속성
+        - 데이터 한건만 설정X
+        - 클래스 객체를 패키지로 전달 가능
+    - 바인딩 순서
+        1. WPF 바인딩 엔진은 DataContext 객체 안에서 public 접근제어자의 fruitItems라는 값을 검색
+        2. this.DataContext 설정이 없으면 null 상태
+        3. this.DataContext = this로 할당 ->  xaml로 전달
+
+    - 바인딩 모드 : 총 4가지 모드. 그중 2가지만 알면됨
+        1. `TwoWay` : 사용중인 데이터가 변경되면 <-> 원본도 변경
+        2. `OneWay` : 원본데이터 -> 사용중인 데이터도 변경
+        3. OneWayToSource : 사용중데이터 변경 -> 원본을 변경
+        4. OneTime : 앱 시작시 최초에만 사용할 데이터에 업데이트
+
+- 데이터베이스 데이터 바인딩
+    1. `NuGet 패키지 관리자` - 파이썬 pip 역할
+        - MySQL 검색 후
+        - `MySQL.Data` 선택, 프로젝트 선택 후
+        - 설치
+    2. 콤보박스 추가
+    3. 비하인드 코드에서 MySQL 소스 추가
+        - DB연결문자열 : connectionString
+        - 쿼리문자열 : query
+        - DB연결객체 : MySqlConnection
+        - 명령실행객체 : MySqlCommand(쿼리문 실행)
+        - 실행결과리더객체 : MySqlDataReader(쿼리결과 데이터)
+        - 트랙잰셕객체 : 옵션. 트랜잭션 처리시 필요
+
+    <img src="./image/cs0016.png" width="600">
+
 
 ## 8일차
 
-### C# 응용 - WPF
-- WPF 기본 
+### WPF 개발방법 및 컨트롤 2
+- 데이터베이스 데이터 바인딩
+    - Xaml Binding 방식
+
+- 네비게이션
+    - 화면 전환 
+
+- 컨트롤 디자인, 리소스
+    - 
 
 ## 9일차
 
@@ -775,3 +943,4 @@ IoT 개발자 C#/WinApp 리포지토리 2025
 ## 10일차
 
 ### 코딩테스트
+
