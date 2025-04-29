@@ -1,0 +1,55 @@
+﻿<Window x:Class="WpfStudyApp04.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfStudyApp04"
+        mc:Ignorable="d"
+        Title="컨트롤디자인/리소스" Height="350" Width="600"
+        Background="{StaticResource SliderBackgroundBrush}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <!-- UI 컨트롤 구성-->
+        <Button Grid.Row="1" Grid.Column="1" Content="CHECK" Margin="10" 
+                Click="Button_Click" FontSize="15" Background="{StaticResource NormalBrush}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <!-- <Ellipse Fill="{TemplateBinding Background}" />-->
+                        <Rectangle Fill="#AA000000" Margin="5,5,0,0" 
+                           RadiusX="5.0" RadiusY="5.0"/>
+                        <Rectangle Fill="{StaticResource NormalBrush}" Margin="0,0,5,5" RadiusX="5.0" RadiusY="5.0"/>
+                        <Label Content="{TemplateBinding Content}" 
+                       Margin="5,5,10,10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <Button  Grid.Row="1" Grid.Column="2" Content="버튼" FontSize="15"/>
+
+        <!-- 리소스 사용, App.xaml에 선언된 Resource -> StaticResource -->
+        <!--<Label Grid.Row="1" Grid.Column="4" 
+               Content="{StaticResource custButton}"
+               Background="{StaticResource accentRed}"
+               Margin="5"/>
+        <Button Style="{StaticResource niceButton}"/>-->
+    </Grid>
+</Window>
