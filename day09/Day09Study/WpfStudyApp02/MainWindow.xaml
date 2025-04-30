@@ -1,0 +1,14 @@
+﻿<Window x:Class="WpfStudyApp02.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:local="clr-namespace:WpfStudyApp02"
+        mc:Ignorable="d"
+        Title="WPF UI App" Height="350" Width="600">
+    <Grid>
+        <Button Content="click" Margin="100" />
+        <ui:SymbolIcon Symbol="Fluent24"/>
+    </Grid>
+</Window>

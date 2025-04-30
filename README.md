@@ -756,7 +756,7 @@ IoT 개발자 C#/WinApp 리포지토리 2025
 - 윈앱 응용개발
     - UI 컨트롤 예제 - [소스](./day06/Day06Study/WinControlsApp/FrmMain.cs)
 
-    <img src=".//image/cs0014.png" width="800">
+    <img src="./image/cs0014.png" width="800">
 
 ## 7일차
 
@@ -809,8 +809,11 @@ IoT 개발자 C#/WinApp 리포지토리 2025
         - 모바일, UWP 등도 동일하게 개발 가능
 
 - WPF 컴포넌트(실무에서 쓰이는 UI컴포넌트, 윈앱도 존재) - Third Party
-    - **(무료)마하앱** - https://mahapps.com/
-    - http://materialdesigninxaml.net/
+    - 참조 - https://github.com/Carlos487/awesome-wpf     
+    - 상용 컴포넌트 제외
+    - **MahApps.Metro** - https://mahapps.com/
+    - **WPF UI** - https://github.com/lepoco/wpfui
+    - Material Design In XAML Toolkit - http://materialdesigninxaml.net/
     
 
 ### WPF 개발방법 및 컨트롤 1
@@ -980,6 +983,18 @@ IoT 개발자 C#/WinApp 리포지토리 2025
 
     4. App.xaml에 필요한 리소스 코드 복사/붙여넣기
     
+        ```xml
+        <Application.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Application.Resources>
+        ```
+
     5. MainWindow.xaml.cs
         - Window -> MetroWindow 변경
 
@@ -1004,9 +1019,66 @@ IoT 개발자 C#/WinApp 리포지토리 2025
 
 ## 9일차
 
-### C# 응용 - WPF
-- WPF 기본 
+### MahApps.Metro 프레임워크
+- 컨트롤 사용법 - [소스](./day09/Day09Study/WpfStudyApp01/MainWindow.xaml)
+    - ProgressBar, MetroProgressBar, ProGressRing
+    - TabControl
 
+### VS Tip
+- 프로젝트는 제거해도 폴더와 파일은 그대로 존재
+    - 윈도우 탐색기에서 폴더 삭제요망
+    
+### WPF UI 프레임 워크
+- 개요
+    - Fluent UI라 이름의 Modern UI의 한 스타일 UI 프레임워크
+    - 2021년 1.0 배포, 현재 버전 4.0.2
+
+- 기본 사용법 - [소스](./day09/Day09Study/WpfStudyApp03/MainWindow.xaml)
+    - NuGet 패키지 관리자 > WPF-UI 검색 후 설치
+    - VS Extension for WPF UI
+        - 메뉴 확장 > 확장관리
+        - WPF-UI 검색 후 설치
+        - VS 종료
+        - VSIS Installer 시작 > Modify
+    - VS Project > WPF UI 프로젝트 선택
+    - MainWindow.xaml을 추가 생성
+    - App.xaml.cs 오픈 - [소스](./day09/Day09Study/WpfStudyApp03/App.xaml.cs)
+        ```cs
+        private static readonly IHost _host = Host
+            .CreateDefaultBuilder()
+            .ConfigureAppConfiguration(c => { c.SetBasePath(Path.GetDirectoryName(AppContext.BaseDirectory)); })
+            .ConfigureServices((context, services) =>
+            {
+                throw new NotImplementedException("No service or window was registered.");
+            }).Build();
+
+        private async void OnStartup(object sender, StartupEventArgs e)
+        {
+            await _host.StartAsync();
+            // .. MainWindow 인스턴스 생성
+            var mainWindow = _host.Services.Get
+        }
+        ```
+    
+    - MainWindow.xaml xmlns:ui 추가 . App.xaml과 동일
+        ```xml
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        ```
+
+    - MainWindow.xaml Window -> ui.FluentWindow 변경
+    - Grid 내 타이틀 바 추가
+        ```xml
+        <ui:TitleBar Title="WPF UI App" />
+        ```
+    - Theme를 Dark로 했을 경우
+        - Window 전체 Background를 어두운 색으로 지정 후 작업
+    
+    - 실행결과
+        - Light Theme
+        <img src="./image/cs0023.png" width="600">
+
+        - Dark Theme
+        <img src="./image/cs0024.png" width="600">
 ## 10일차
 
 ### 코딩테스트
