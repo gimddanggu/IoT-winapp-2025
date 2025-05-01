@@ -30,8 +30,10 @@ namespace PaintBoard
         }
 
         int eraserSize = 20;    // 기본 지우개 크기
-        int penSize = 2;
-        Color penColor = Color.Black;
+        int penSize = 2;        // 기본 펜 크기
+        float blendRatio = 0.5f; // 0 = 회색 완전함, 1 = 원래 색상 유지
+        Color previewColor;     // 도형 그리기용 미리보기 색상 선택한 색상에서 회색빛 돌도록
+        Color penColor = Color.Black;       // 기본 펜 색상
         ToolMode currentPenMode = ToolMode.Pen; // 기본 모드 : 펜
         ShapeMode currentShapeMode = ShapeMode.None;
 
@@ -43,6 +45,7 @@ namespace PaintBoard
         Bitmap backgroundCanvas;    // 배경 캔버스
         Graphics g;
         Pen drawPen;    // 전역변수일 필요 x
+        Pen previewPen;
 
 
         Stack<Bitmap> undoStack = new Stack<Bitmap>();  // 그림 되돌리기 기능을 위한 비트맵 스택 생성
@@ -54,6 +57,25 @@ namespace PaintBoard
         Color backgroundColor = Color.White;
         Point prevPoint;
         Point startPoint;
+
+        void UpdatePreviewPen(Color baseColor)
+        {
+            Color gray = Color.Gray;
+            float ratio = 0.5f;
+            Color blended =  Color.FromArgb(
+                (int)(baseColor.R * ratio + gray.R * (1 - ratio)),
+                (int)(baseColor.G * ratio + gray.G * (1 - ratio)),
+                (int)(baseColor.B * ratio + gray.B * (1 - ratio))
+            );
+
+            previewPen?.Dispose();
+            previewPen = new Pen(blended, penSize)
+            {
+                DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
+            };
+        }
+
+
 
         private void RenderToWhiteBoard()
         {
@@ -181,7 +203,8 @@ namespace PaintBoard
             previewCanvas = new Bitmap(w, h, PixelFormat.Format32bppArgb);    // 도형 미리보기를 위한 캔버스
             backgroundCanvas = new Bitmap(w, h, PixelFormat.Format32bppArgb); // 배경 캔버스
 
-            drawPen = new Pen(Color.Black, penSize); // 굳이?
+            //drawPen = new Pen(Color.Black, penSize); // 굳이?
+            UpdatePreviewPen(penColor); // previewPenColor 초기화
 
             using (Graphics g = Graphics.FromImage(backgroundCanvas))
             {
@@ -221,7 +244,7 @@ namespace PaintBoard
         {
             if (isDrawing)
             {
-                if (currentPenMode == ToolMode.Eraser)
+                if (currentPenMode == ToolMode.Eraser && currentShapeMode == ShapeMode.None)
                 {
                     EraseAt(e.X, e.Y);  // 여기서 투명 지우개 호출
 
@@ -248,10 +271,10 @@ namespace PaintBoard
 
                     using (Graphics g = Graphics.FromImage(previewCanvas))
                     {
-                        Pen previewPen = new Pen(Color.Gray, penSize)
-                        {
-                            DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
-                        };
+                        //Pen previewPen = new Pen(Color.Gray, penSize)
+                        //{
+                        //    DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
+                        //};
 
                         Point endPoint = e.Location;
 
@@ -274,8 +297,6 @@ namespace PaintBoard
                             g.DrawEllipse(previewPen, ellipseRect);
                         }
                     }
-                    //WhiteBoard.Image = previewCanvas;
-                    //WhiteBoard.Invalidate();
                 }
 
                 RenderToWhiteBoard();
@@ -290,13 +311,24 @@ namespace PaintBoard
             Point endPoint = e.Location;
 
             using (Graphics g = Graphics.FromImage(drawingCanvas))
+            using (Pen currentPen = GetPenForCurrentMode())
             {
+
+                // 뭔가 도형을 그릴 때 이미 그려진 도형의 색상이 변하는 느낌이 있다 (수정필요)
+                //new Pen(penColor, penSize)
+                
+                if (penColor.IsEmpty)
+                {
+                    MessageBox.Show("펜 색상이 비어있습니다. 기본값으로 설정합니다.");
+                    penColor = Color.Black;
+                }
+
                 if (currentShapeMode == ShapeMode.Rectangle)
-                    g.DrawRectangle(drawPen, GetRectangle(startPoint, endPoint));
+                    g.DrawRectangle(currentPen, GetRectangle(startPoint, endPoint));
                 else if (currentShapeMode == ShapeMode.Triangle)
-                    g.DrawPolygon(drawPen, GetTrianglePoints(startPoint, endPoint));
+                    g.DrawPolygon(currentPen, GetTrianglePoints(startPoint, endPoint));
                 else if (currentShapeMode == ShapeMode.Circle)
-                    g.DrawEllipse(drawPen, GetRectangle(startPoint, endPoint));
+                    g.DrawEllipse(currentPen, GetRectangle(startPoint, endPoint));
 
             }
 
@@ -315,6 +347,8 @@ namespace PaintBoard
             if (DlgColor.ShowDialog() == DialogResult.OK)
             {
                 penColor = DlgColor.Color;
+                UpdatePreviewPen(penColor);
+
             }
         }
 
@@ -329,7 +363,7 @@ namespace PaintBoard
             //    g.Clear(backgroundColor);
             //}
             //RenderToWhiteBoard();
-
+            // (?) 여긴 잘 이해가 안되니까 다시 찾아보기
             // 1. 그림 그린 캔버스 초기화
             using (Graphics g = Graphics.FromImage(drawingCanvas))
             {
@@ -350,6 +384,7 @@ namespace PaintBoard
         {
             Console.WriteLine("[DEBUG]지우개버튼 클릭");
             currentPenMode = ToolMode.Eraser;
+            currentShapeMode = ShapeMode.None;
         }
 
 
