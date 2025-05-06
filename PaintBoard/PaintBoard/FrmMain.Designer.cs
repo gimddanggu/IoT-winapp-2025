@@ -43,6 +43,7 @@
             groupBox1 = new GroupBox();
             groupBox2 = new GroupBox();
             groupBox5 = new GroupBox();
+            BtnSpray = new Button();
             BtnCrayon = new Button();
             BtnMarker = new Button();
             BtnBrush = new Button();
@@ -52,7 +53,6 @@
             BtnSaveImg = new Button();
             BtnLoadImg = new Button();
             groupBox4 = new GroupBox();
-            groupBox6 = new GroupBox();
             ((System.ComponentModel.ISupportInitialize)WhiteBoard).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -66,10 +66,9 @@
             // WhiteBoard
             // 
             WhiteBoard.BackColor = Color.White;
-            WhiteBoard.Location = new Point(15, 16);
-            WhiteBoard.Margin = new Padding(4);
+            WhiteBoard.Location = new Point(12, 12);
             WhiteBoard.Name = "WhiteBoard";
-            WhiteBoard.Size = new Size(626, 568);
+            WhiteBoard.Size = new Size(1005, 931);
             WhiteBoard.TabIndex = 0;
             WhiteBoard.TabStop = false;
             WhiteBoard.MouseDown += WhiteBoard_MouseDown;
@@ -78,9 +77,10 @@
             // 
             // BtnPenColor
             // 
-            BtnPenColor.Location = new Point(16, 27);
+            BtnPenColor.Location = new Point(23, 20);
+            BtnPenColor.Margin = new Padding(2);
             BtnPenColor.Name = "BtnPenColor";
-            BtnPenColor.Size = new Size(94, 29);
+            BtnPenColor.Size = new Size(73, 22);
             BtnPenColor.TabIndex = 1;
             BtnPenColor.Text = "펜 색상";
             BtnPenColor.UseVisualStyleBackColor = true;
@@ -88,9 +88,10 @@
             // 
             // BtnEraser
             // 
-            BtnEraser.Location = new Point(22, 26);
+            BtnEraser.Location = new Point(17, 20);
+            BtnEraser.Margin = new Padding(2);
             BtnEraser.Name = "BtnEraser";
-            BtnEraser.Size = new Size(94, 29);
+            BtnEraser.Size = new Size(73, 22);
             BtnEraser.TabIndex = 2;
             BtnEraser.Text = "지우개";
             BtnEraser.UseVisualStyleBackColor = true;
@@ -98,9 +99,10 @@
             // 
             // BtnAllClear
             // 
-            BtnAllClear.Location = new Point(21, 92);
+            BtnAllClear.Location = new Point(17, 69);
+            BtnAllClear.Margin = new Padding(2);
             BtnAllClear.Name = "BtnAllClear";
-            BtnAllClear.Size = new Size(103, 29);
+            BtnAllClear.Size = new Size(80, 22);
             BtnAllClear.TabIndex = 2;
             BtnAllClear.Text = "전체 지우개";
             BtnAllClear.UseVisualStyleBackColor = true;
@@ -108,9 +110,10 @@
             // 
             // BtnPen
             // 
-            BtnPen.Location = new Point(17, 44);
+            BtnPen.Location = new Point(13, 23);
+            BtnPen.Margin = new Padding(2);
             BtnPen.Name = "BtnPen";
-            BtnPen.Size = new Size(94, 29);
+            BtnPen.Size = new Size(73, 22);
             BtnPen.TabIndex = 3;
             BtnPen.Text = "펜";
             BtnPen.UseVisualStyleBackColor = true;
@@ -118,9 +121,10 @@
             // 
             // BtnBackgroundColor
             // 
-            BtnBackgroundColor.Location = new Point(141, 92);
+            BtnBackgroundColor.Location = new Point(103, 69);
+            BtnBackgroundColor.Margin = new Padding(2);
             BtnBackgroundColor.Name = "BtnBackgroundColor";
-            BtnBackgroundColor.Size = new Size(94, 29);
+            BtnBackgroundColor.Size = new Size(73, 22);
             BtnBackgroundColor.TabIndex = 3;
             BtnBackgroundColor.Text = "캔버스 색";
             BtnBackgroundColor.UseVisualStyleBackColor = true;
@@ -128,10 +132,9 @@
             // 
             // BtnUndo
             // 
-            BtnUndo.Location = new Point(942, 352);
-            BtnUndo.Margin = new Padding(4);
+            BtnUndo.Location = new Point(1272, 272);
             BtnUndo.Name = "BtnUndo";
-            BtnUndo.Size = new Size(96, 31);
+            BtnUndo.Size = new Size(75, 23);
             BtnUndo.TabIndex = 4;
             BtnUndo.Text = "Undo";
             BtnUndo.UseVisualStyleBackColor = true;
@@ -139,10 +142,9 @@
             // 
             // BtnRedo
             // 
-            BtnRedo.Location = new Point(1058, 352);
-            BtnRedo.Margin = new Padding(4);
+            BtnRedo.Location = new Point(1354, 272);
             BtnRedo.Name = "BtnRedo";
-            BtnRedo.Size = new Size(96, 31);
+            BtnRedo.Size = new Size(75, 23);
             BtnRedo.TabIndex = 5;
             BtnRedo.Text = "Redo";
             BtnRedo.UseVisualStyleBackColor = true;
@@ -150,10 +152,9 @@
             // 
             // BtnRectangle
             // 
-            BtnRectangle.Location = new Point(8, 29);
-            BtnRectangle.Margin = new Padding(4);
+            BtnRectangle.Location = new Point(29, 22);
             BtnRectangle.Name = "BtnRectangle";
-            BtnRectangle.Size = new Size(58, 31);
+            BtnRectangle.Size = new Size(45, 23);
             BtnRectangle.TabIndex = 6;
             BtnRectangle.Text = "네모";
             BtnRectangle.UseVisualStyleBackColor = true;
@@ -161,10 +162,9 @@
             // 
             // BtnTriangle
             // 
-            BtnTriangle.Location = new Point(73, 29);
-            BtnTriangle.Margin = new Padding(4);
+            BtnTriangle.Location = new Point(85, 22);
             BtnTriangle.Name = "BtnTriangle";
-            BtnTriangle.Size = new Size(72, 31);
+            BtnTriangle.Size = new Size(45, 23);
             BtnTriangle.TabIndex = 6;
             BtnTriangle.Text = "세모";
             BtnTriangle.UseVisualStyleBackColor = true;
@@ -172,10 +172,9 @@
             // 
             // BtnCircle
             // 
-            BtnCircle.Location = new Point(165, 29);
-            BtnCircle.Margin = new Padding(4);
+            BtnCircle.Location = new Point(141, 22);
             BtnCircle.Name = "BtnCircle";
-            BtnCircle.Size = new Size(62, 31);
+            BtnCircle.Size = new Size(45, 23);
             BtnCircle.TabIndex = 6;
             BtnCircle.Text = "원";
             BtnCircle.UseVisualStyleBackColor = true;
@@ -186,11 +185,9 @@
             groupBox1.Controls.Add(BtnRectangle);
             groupBox1.Controls.Add(BtnCircle);
             groupBox1.Controls.Add(BtnTriangle);
-            groupBox1.Location = new Point(657, 323);
-            groupBox1.Margin = new Padding(4);
+            groupBox1.Location = new Point(1023, 250);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(4);
-            groupBox1.Size = new Size(257, 73);
+            groupBox1.Size = new Size(215, 55);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "도형";
@@ -200,33 +197,45 @@
             groupBox2.Controls.Add(groupBox5);
             groupBox2.Controls.Add(TrbPenSize);
             groupBox2.Controls.Add(BtnPenColor);
-            groupBox2.Location = new Point(657, 16);
-            groupBox2.Margin = new Padding(4);
+            groupBox2.Location = new Point(1023, 12);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(4);
-            groupBox2.Size = new Size(504, 163);
+            groupBox2.Size = new Size(425, 114);
             groupBox2.TabIndex = 8;
             groupBox2.TabStop = false;
             groupBox2.Text = "groupBox2";
             // 
             // groupBox5
             // 
+            groupBox5.Controls.Add(BtnSpray);
             groupBox5.Controls.Add(BtnCrayon);
             groupBox5.Controls.Add(BtnMarker);
             groupBox5.Controls.Add(BtnPen);
             groupBox5.Controls.Add(BtnBrush);
-            groupBox5.Location = new Point(13, 62);
+            groupBox5.Location = new Point(10, 46);
+            groupBox5.Margin = new Padding(2);
             groupBox5.Name = "groupBox5";
-            groupBox5.Size = new Size(484, 94);
+            groupBox5.Padding = new Padding(2);
+            groupBox5.Size = new Size(410, 59);
             groupBox5.TabIndex = 5;
             groupBox5.TabStop = false;
             groupBox5.Text = "groupBox5";
             // 
+            // BtnSpray
+            // 
+            BtnSpray.Location = new Point(321, 24);
+            BtnSpray.Name = "BtnSpray";
+            BtnSpray.Size = new Size(75, 23);
+            BtnSpray.TabIndex = 4;
+            BtnSpray.Text = "스프레이";
+            BtnSpray.UseVisualStyleBackColor = true;
+            BtnSpray.Click += BtnSpray_Click;
+            // 
             // BtnCrayon
             // 
-            BtnCrayon.Location = new Point(353, 44);
+            BtnCrayon.Location = new Point(244, 23);
+            BtnCrayon.Margin = new Padding(2);
             BtnCrayon.Name = "BtnCrayon";
-            BtnCrayon.Size = new Size(94, 29);
+            BtnCrayon.Size = new Size(73, 22);
             BtnCrayon.TabIndex = 0;
             BtnCrayon.Text = "크레용";
             BtnCrayon.UseVisualStyleBackColor = true;
@@ -234,9 +243,10 @@
             // 
             // BtnMarker
             // 
-            BtnMarker.Location = new Point(248, 44);
+            BtnMarker.Location = new Point(167, 23);
+            BtnMarker.Margin = new Padding(2);
             BtnMarker.Name = "BtnMarker";
-            BtnMarker.Size = new Size(94, 29);
+            BtnMarker.Size = new Size(73, 22);
             BtnMarker.TabIndex = 0;
             BtnMarker.Text = "마커";
             BtnMarker.UseVisualStyleBackColor = true;
@@ -244,9 +254,10 @@
             // 
             // BtnBrush
             // 
-            BtnBrush.Location = new Point(128, 44);
+            BtnBrush.Location = new Point(90, 23);
+            BtnBrush.Margin = new Padding(2);
             BtnBrush.Name = "BtnBrush";
-            BtnBrush.Size = new Size(94, 29);
+            BtnBrush.Size = new Size(73, 22);
             BtnBrush.TabIndex = 0;
             BtnBrush.Text = "브러쉬";
             BtnBrush.UseVisualStyleBackColor = true;
@@ -254,11 +265,12 @@
             // 
             // TrbPenSize
             // 
-            TrbPenSize.Location = new Point(116, 27);
+            TrbPenSize.Location = new Point(105, 20);
+            TrbPenSize.Margin = new Padding(2);
             TrbPenSize.Maximum = 20;
             TrbPenSize.Minimum = 2;
             TrbPenSize.Name = "TrbPenSize";
-            TrbPenSize.Size = new Size(381, 56);
+            TrbPenSize.Size = new Size(315, 45);
             TrbPenSize.TabIndex = 4;
             TrbPenSize.Value = 2;
             TrbPenSize.Scroll += trackBar1_Scroll;
@@ -267,11 +279,12 @@
             // TrbEraserSize
             // 
             TrbEraserSize.LargeChange = 10;
-            TrbEraserSize.Location = new Point(128, 26);
+            TrbEraserSize.Location = new Point(100, 20);
+            TrbEraserSize.Margin = new Padding(2);
             TrbEraserSize.Maximum = 50;
             TrbEraserSize.Minimum = 10;
             TrbEraserSize.Name = "TrbEraserSize";
-            TrbEraserSize.Size = new Size(369, 56);
+            TrbEraserSize.Size = new Size(320, 45);
             TrbEraserSize.SmallChange = 5;
             TrbEraserSize.TabIndex = 4;
             TrbEraserSize.TickFrequency = 5;
@@ -282,27 +295,31 @@
             // 
             groupBox3.Controls.Add(BtnSaveImg);
             groupBox3.Controls.Add(BtnLoadImg);
-            groupBox3.Location = new Point(664, 416);
+            groupBox3.Location = new Point(1023, 310);
+            groupBox3.Margin = new Padding(2);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(250, 125);
+            groupBox3.Padding = new Padding(2);
+            groupBox3.Size = new Size(215, 59);
             groupBox3.TabIndex = 9;
             groupBox3.TabStop = false;
             groupBox3.Text = "파일";
             // 
             // BtnSaveImg
             // 
-            BtnSaveImg.Location = new Point(23, 70);
+            BtnSaveImg.Location = new Point(105, 20);
+            BtnSaveImg.Margin = new Padding(2);
             BtnSaveImg.Name = "BtnSaveImg";
-            BtnSaveImg.Size = new Size(94, 29);
+            BtnSaveImg.Size = new Size(73, 22);
             BtnSaveImg.TabIndex = 0;
             BtnSaveImg.Text = "Save";
             BtnSaveImg.UseVisualStyleBackColor = true;
             // 
             // BtnLoadImg
             // 
-            BtnLoadImg.Location = new Point(23, 26);
+            BtnLoadImg.Location = new Point(18, 20);
+            BtnLoadImg.Margin = new Padding(2);
             BtnLoadImg.Name = "BtnLoadImg";
-            BtnLoadImg.Size = new Size(94, 29);
+            BtnLoadImg.Size = new Size(73, 22);
             BtnLoadImg.TabIndex = 0;
             BtnLoadImg.Text = "Load";
             BtnLoadImg.UseVisualStyleBackColor = true;
@@ -313,28 +330,20 @@
             groupBox4.Controls.Add(BtnEraser);
             groupBox4.Controls.Add(BtnAllClear);
             groupBox4.Controls.Add(BtnBackgroundColor);
-            groupBox4.Location = new Point(657, 189);
+            groupBox4.Location = new Point(1023, 131);
+            groupBox4.Margin = new Padding(2);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(504, 127);
+            groupBox4.Padding = new Padding(2);
+            groupBox4.Size = new Size(425, 114);
             groupBox4.TabIndex = 10;
             groupBox4.TabStop = false;
             groupBox4.Text = "groupBox4";
             // 
-            // groupBox6
-            // 
-            groupBox6.Location = new Point(942, 416);
-            groupBox6.Name = "groupBox6";
-            groupBox6.Size = new Size(212, 125);
-            groupBox6.TabIndex = 11;
-            groupBox6.TabStop = false;
-            groupBox6.Text = "레이어";
-            // 
             // FrmMain
             // 
-            AutoScaleDimensions = new SizeF(9F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1174, 600);
-            Controls.Add(groupBox6);
+            ClientSize = new Size(1460, 955);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
@@ -342,7 +351,6 @@
             Controls.Add(BtnRedo);
             Controls.Add(BtnUndo);
             Controls.Add(WhiteBoard);
-            Margin = new Padding(4);
             Name = "FrmMain";
             Text = "그림판";
             Load += FrmMain_Load;
@@ -385,6 +393,6 @@
         private Button BtnCrayon;
         private Button BtnMarker;
         private Button BtnBrush;
-        private GroupBox groupBox6;
+        private Button BtnSpray;
     }
 }

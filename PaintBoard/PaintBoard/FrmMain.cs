@@ -1,5 +1,7 @@
+using Microsoft.VisualBasic.Logging;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -22,31 +24,38 @@ namespace PaintBoard
 
         enum ToolMode
         {
+            None,
+
             Pen,
             Brush,
             Marker,
             Crayon,
+            Spray,
             Eraser
         }
-
-        int eraserSize = 20;    // 기본 지우개 크기
-        int penSize = 2;        // 기본 펜 크기
-        float blendRatio = 0.5f; // 0 = 회색 완전함, 1 = 원래 색상 유지
-        Color previewColor;     // 도형 그리기용 미리보기 색상 선택한 색상에서 회색빛 돌도록
-        Color penColor = Color.Black;       // 기본 펜 색상
+        /* 전역변수 */
+        int eraserSize = 20;        // 기본 지우개 크기
+        int penSize = 2;            // 기본 펜 크기
+        Color previewColor;         // 도형 그리기용 미리보기 색상 선택한 색상에서 회색빛 돌도록
+        Color penColor = Color.Black;           // 기본 펜 색상
         ToolMode currentPenMode = ToolMode.Pen; // 기본 모드 : 펜
         ShapeMode currentShapeMode = ShapeMode.None;
 
-        //Bitmap texture = new Bitmap("crayon_texture.png");
-        //Brush crayonBrush = new TextureBrush(texture);
+        Bitmap texture;
+        Brush crayonBrush;
 
         Bitmap drawingCanvas;       // 그리기용 캔버스
         Bitmap previewCanvas;       // 도형 미리보기용 캔버스
         Bitmap backgroundCanvas;    // 배경 캔버스
         Graphics g;
-        Pen drawPen;    // 전역변수일 필요 x
+
         Pen previewPen;
 
+        Image img;
+        Random rnd = new Random();
+        float prevAngle = 0f; // 클래스 멤버로 선언해줘야 함 // 추가
+
+        float lastAngle = 0;
 
         Stack<Bitmap> undoStack = new Stack<Bitmap>();  // 그림 되돌리기 기능을 위한 비트맵 스택 생성
         Stack<Bitmap> redoStack = new Stack<Bitmap>();  // 그림 되돌리기 기능을 위한 비트맵 스택 생성
@@ -58,11 +67,13 @@ namespace PaintBoard
         Point prevPoint;
         Point startPoint;
 
+        /* 함수 */
+        // 선택한 색상에 따라 미리보기 점선 색 변화
         void UpdatePreviewPen(Color baseColor)
         {
             Color gray = Color.Gray;
             float ratio = 0.5f;
-            Color blended =  Color.FromArgb(
+            Color blended = Color.FromArgb(
                 (int)(baseColor.R * ratio + gray.R * (1 - ratio)),
                 (int)(baseColor.G * ratio + gray.G * (1 - ratio)),
                 (int)(baseColor.B * ratio + gray.B * (1 - ratio))
@@ -77,6 +88,7 @@ namespace PaintBoard
 
 
 
+        // 배경/ 그리기 / 미리보기 캔버스 합침
         private void RenderToWhiteBoard()
         {
             Bitmap final = new Bitmap(drawingCanvas.Width, drawingCanvas.Height, PixelFormat.Format32bppArgb);
@@ -90,6 +102,8 @@ namespace PaintBoard
 
             WhiteBoard.Image = final;
         }
+
+        // 투명지우개 영영(사각형)
         private void EraseAt(int x, int y)
         {
             Rectangle eraseRect = new Rectangle(
@@ -132,6 +146,7 @@ namespace PaintBoard
             drawingCanvas.UnlockBits(bmpData);
         }
 
+        // 사각형 위치 설정
         private Rectangle GetRectangle(Point p1, Point p2)
         {
             return new Rectangle(
@@ -142,6 +157,7 @@ namespace PaintBoard
             );
         }
 
+        // 삼각형 위치 설정
         private Point[] GetTrianglePoints(Point p1, Point p2)
         {
             Point top = new Point((p1.X + p2.X) / 2, Math.Min(p1.Y, p2.Y));         // 꼭짓점 좌표
@@ -151,7 +167,34 @@ namespace PaintBoard
             return new Point[] { top, left, right };
 
         }
+        // 텍스쳐 이미지 연하게 만들기
+        private static Bitmap MakeBitmapTransparent(Bitmap src, int alpha)
+        {
+            Bitmap output = new Bitmap(src.Width, src.Height, PixelFormat.Format32bppArgb);
+            using (Graphics g = Graphics.FromImage(output))
+            {
+                // 원형 경로 생성
+                using (GraphicsPath path = new GraphicsPath())
+                {
+                    path.AddEllipse(0, 0, src.Width, src.Height);
+                    g.SetClip(path);  // 클리핑 적용
+                }
 
+                ColorMatrix colorMatrix = new ColorMatrix()
+                {
+                    Matrix33 = alpha / 255f
+                };
+                ImageAttributes attr = new ImageAttributes();
+                attr.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                g.DrawImage(src, new Rectangle(0, 0, src.Width, src.Height),
+                    0, 0, src.Width, src.Height,
+                    GraphicsUnit.Pixel, attr);
+            }
+            return output;
+        }
+
+        // 현재 펜 모드 설정
         private Pen GetPenForCurrentMode()
         {
             switch (currentPenMode)
@@ -163,30 +206,14 @@ namespace PaintBoard
                         EndCap = System.Drawing.Drawing2D.LineCap.Round
                     };
 
-                case ToolMode.Brush:
-                    return new Pen(Color.FromArgb(200, penColor), penSize * 3)
-                    {
-                        StartCap = System.Drawing.Drawing2D.LineCap.Round,
-                        EndCap = System.Drawing.Drawing2D.LineCap.Round,
-                        LineJoin = System.Drawing.Drawing2D.LineJoin.Round
-                    };
 
                 case ToolMode.Marker:
-                    return new Pen(Color.FromArgb(80, penColor), penSize * 3)
+                    return new Pen(Color.FromArgb(20, penColor), penSize * 3)
                     {
                         StartCap = System.Drawing.Drawing2D.LineCap.Round,
                         EndCap = System.Drawing.Drawing2D.LineCap.Round
                     };
 
-                //case ToolMode.Crayon:
-                //    // 질감 처리 고민해보기
-
-                //    Pen crayonPen = new Pen(crayonBrush, penSize * 2)
-                //    {
-                //        StartCap = System.Drawing.Drawing2D.LineCap.Round,
-                //        EndCap = System.Drawing.Drawing2D.LineCap.Round
-                //    };
-                //    return crayonPen;
 
                 default:
                     return new Pen(penColor, penSize);
@@ -194,6 +221,36 @@ namespace PaintBoard
             }
         }
 
+        private Bitmap TintImage(Bitmap original, Color tint)
+        {
+            float boost = 4f;
+
+            Bitmap tinted = new Bitmap(original.Width, original.Height);
+            using (Graphics g = Graphics.FromImage(tinted))
+            {
+                // 색 입히기: ColorMatrix 활용 가능, 여기선 간단히 곱셈 방식
+                ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                {
+            new float[] {tint.R / 255f * boost, 0, 0, 0, 0},
+            new float[] {0, tint.G / 255f * boost, 0, 0, 0},
+            new float[] {0, 0, tint.B / 255f * boost, 0, 0},
+            new float[] {0, 0, 0, 1, 0},
+            new float[] {0, 0, 0, 0, 1}
+                });
+
+                ImageAttributes attributes = new ImageAttributes();
+                attributes.SetColorMatrix(colorMatrix);
+
+                g.DrawImage(original, new Rectangle(0, 0, original.Width, original.Height),
+                    0, 0, original.Width, original.Height,
+                    GraphicsUnit.Pixel, attributes);
+            }
+            return tinted;
+        }
+
+        
+
+        /* 이벤트 함수 */
         private void FrmMain_Load(object sender, EventArgs e)
         {
             int w = WhiteBoard.Width;
@@ -203,13 +260,18 @@ namespace PaintBoard
             previewCanvas = new Bitmap(w, h, PixelFormat.Format32bppArgb);    // 도형 미리보기를 위한 캔버스
             backgroundCanvas = new Bitmap(w, h, PixelFormat.Format32bppArgb); // 배경 캔버스
 
-            //drawPen = new Pen(Color.Black, penSize); // 굳이?
+
             UpdatePreviewPen(penColor); // previewPenColor 초기화
 
+            // 배경 초기화
             using (Graphics g = Graphics.FromImage(backgroundCanvas))
             {
                 g.Clear(Color.White);
             }
+
+
+            texture = new Bitmap("brush_texture4.png"); // 실행 경로에 있는 이미지
+            img = TintImage(texture, penColor); // 색 덮입해서 실제 사용
             // 초기 화면 표시
             RenderToWhiteBoard();
 
@@ -217,8 +279,10 @@ namespace PaintBoard
             this.DoubleBuffered = true;
         }
 
+        // 마우스 다운 이벤트
         private void WhiteBoard_MouseDown(object sender, MouseEventArgs e)
         {
+
             if (currentShapeMode == ShapeMode.None || currentPenMode == ToolMode.Eraser)
             {
                 isDrawing = true;
@@ -239,70 +303,152 @@ namespace PaintBoard
             undoStack.Push(new Bitmap(drawingCanvas));
 
         }
-
+        // 마우스 무브 이벤트
         private void WhiteBoard_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDrawing)
             {
-                if (currentPenMode == ToolMode.Eraser && currentShapeMode == ShapeMode.None)
+                using (Graphics g = Graphics.FromImage(drawingCanvas))
                 {
-                    EraseAt(e.X, e.Y);  // 여기서 투명 지우개 호출
+                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    g.CompositingMode = CompositingMode.SourceOver;
 
-                }
-                else if (currentShapeMode == ShapeMode.None)
-                {
-                    using (Graphics g = Graphics.FromImage(drawingCanvas))
-                    using (Pen currentPen = GetPenForCurrentMode())
+                    switch (currentPenMode)
                     {
-                        //currentPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
-                        //currentPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
-                        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                        g.DrawLine(currentPen, prevPoint, e.Location);  // 이동한 선 그리기
-                        prevPoint = e.Location;     // 현재 좌표를 다음 출발점으로
+                        case ToolMode.Crayon:
+
+                            int size = TrbPenSize.Value; // 트랙바 값으로 굵기 조절
+                            int density = size * 3; // 굵기에 따라 점 개수 증가 (원하는 대로 조절)
+
+                            using (Brush crayonBrush = new SolidBrush(penColor))
+
+                                for (int i = 0; i < density; i++)
+                                {
+                                    int dx = rnd.Next(-size, size);
+                                    int dy = rnd.Next(-size, size);
+                                    g.FillEllipse(crayonBrush, e.X + dx, e.Y + dy, 2, 2);
+                                }
+                            break;
+
+                        case ToolMode.Brush:
+                            int width = img.Width;
+                            int height = img.Height;
+
+                            if (img == null)
+                            {
+                                Console.WriteLine("브러시 텍스처 이미지가 로딩되지 않았습니다.");
+                                break;
+                            }
+
+
+                            using (TextureBrush textureBrush = new TextureBrush(img))
+                            {
+                                textureBrush.WrapMode = WrapMode.Clamp;
+                                float x = e.X - width / 2f;
+                                float y = e.Y - height / 2f;
+
+                                float dx = e.X - prevPoint.X;
+                                float dy = e.Y - prevPoint.Y;
+                                float angle = (float)(Math.Atan2(dy, dx) * (180 / Math.PI));
+
+                                float centerX = width / 2f;
+                                float centerY = height / 2f;
+
+                                if (Math.Sqrt(dx * dx + dy * dy) > 2)  // 너무 짧은 이동은 무시
+                                {
+                                    angle = lastAngle + (angle - lastAngle) * 0.15f; // 보간으로 자연스럽게
+                                    lastAngle = angle;
+                                }
+
+                                textureBrush.ResetTransform();
+                                textureBrush.TranslateTransform(x + centerX, y + centerY);
+                                textureBrush.RotateTransform(lastAngle);
+                                textureBrush.TranslateTransform(-centerX, -centerY);
+
+                                g.FillEllipse(textureBrush, x, y, width, height);
+                            }
+
+                            break;
+
+                        case ToolMode.Spray:
+                            using (Brush sprayBrush = new SolidBrush(penColor))
+                            {
+                                int sprayRadius = TrbPenSize.Value; // 트랙바로 반경 조절
+                                int sprayDensity = sprayRadius * 2;
+                                // 점의 개수 (밀도)
+
+                                for (int i = 0; i < sprayDensity; i++)
+                                {
+
+                                    if (rnd.NextDouble() > 0.3) continue; // 40% 확률만 뿌림
+
+                                    double angle = rnd.NextDouble() * 2 * Math.PI;
+                                    double radius = Math.Sqrt(rnd.NextDouble()) * sprayRadius;
+                                    int dx = (int)(Math.Cos(angle) * radius);
+                                    int dy = (int)(Math.Sin(angle) * radius);
+
+                                    g.FillEllipse(sprayBrush, e.X + dx, e.Y + dy, 2, 2); // 점 하나
+                                }
+                            }
+                            break;
+
+
+                        case ToolMode.Eraser when currentShapeMode == ShapeMode.None:
+                            EraseAt(e.X, e.Y);  // 여기서 투명 지우개 호출
+                            break;
+
+                        default:
+                            using (Pen currentPen = GetPenForCurrentMode())
+                            {
+                                g.DrawLine(currentPen, prevPoint, e.Location);  // 이동한 선 그리기
+
+                            }
+                            break;
                     }
+                    prevPoint = e.Location;     // 현재 좌표를 다음 출발점으로
 
                 }
-                else if (currentShapeMode == ShapeMode.Rectangle ||
-                        currentShapeMode == ShapeMode.Circle ||
-                        currentShapeMode == ShapeMode.Triangle)
-                {
-                    // 미리보기 캔버스 초기화
-                    previewCanvas = new Bitmap(drawingCanvas);
-
-                    using (Graphics g = Graphics.FromImage(previewCanvas))
-                    {
-                        //Pen previewPen = new Pen(Color.Gray, penSize)
-                        //{
-                        //    DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
-                        //};
-
-                        Point endPoint = e.Location;
-
-                        // 네모 그리기
-                        if (currentShapeMode == ShapeMode.Rectangle)
-                        {
-                            Rectangle rect = GetRectangle(startPoint, endPoint);
-                            g.DrawRectangle(previewPen, rect);
-                        }
-                        // 세모 그리기
-                        if (currentShapeMode == ShapeMode.Triangle)
-                        {
-                            Point[] triangle = GetTrianglePoints(startPoint, endPoint);
-                            g.DrawPolygon(previewPen, triangle);
-                        }
-                        // 원 그리기
-                        if (currentShapeMode == ShapeMode.Circle)
-                        {
-                            Rectangle ellipseRect = GetRectangle(startPoint, endPoint);
-                            g.DrawEllipse(previewPen, ellipseRect);
-                        }
-                    }
-                }
-
-                RenderToWhiteBoard();
             }
-        }
 
+
+
+            else if (currentShapeMode == ShapeMode.Rectangle ||
+                    currentShapeMode == ShapeMode.Circle ||
+                    currentShapeMode == ShapeMode.Triangle)
+            {
+                // 미리보기 캔버스 초기화
+                previewCanvas = new Bitmap(drawingCanvas);
+
+                using (Graphics g = Graphics.FromImage(previewCanvas))
+                {
+
+                    Point endPoint = e.Location;
+
+                    // 네모 그리기
+                    if (currentShapeMode == ShapeMode.Rectangle)
+                    {
+                        Rectangle rect = GetRectangle(startPoint, endPoint);
+                        g.DrawRectangle(previewPen, rect);
+                    }
+                    // 세모 그리기
+                    if (currentShapeMode == ShapeMode.Triangle)
+                    {
+                        Point[] triangle = GetTrianglePoints(startPoint, endPoint);
+                        g.DrawPolygon(previewPen, triangle);
+                    }
+                    // 원 그리기
+                    if (currentShapeMode == ShapeMode.Circle)
+                    {
+                        Rectangle ellipseRect = GetRectangle(startPoint, endPoint);
+                        g.DrawEllipse(previewPen, ellipseRect);
+                    }
+                }
+            }
+
+            RenderToWhiteBoard();
+
+        }
+        // 마우스 업 이벤트
         private void WhiteBoard_MouseUp(object sender, MouseEventArgs e)
         {
 
@@ -316,7 +462,7 @@ namespace PaintBoard
 
                 // 뭔가 도형을 그릴 때 이미 그려진 도형의 색상이 변하는 느낌이 있다 (수정필요)
                 //new Pen(penColor, penSize)
-                
+
                 if (penColor.IsEmpty)
                 {
                     MessageBox.Show("펜 색상이 비어있습니다. 기본값으로 설정합니다.");
@@ -335,12 +481,11 @@ namespace PaintBoard
             previewCanvas = new Bitmap(drawingCanvas.Width, drawingCanvas.Height, PixelFormat.Format32bppArgb);
 
 
-            // undo 저장 // 마우스를 한번 때면 undo 스택에 저장
-            //undoStack.Push(new Bitmap(canvas));
 
             RenderToWhiteBoard();
         }
 
+        // 색상 버튼 클릭
         private void BtnColor_Click(object sender, EventArgs e)
         {
             Console.WriteLine("[DEBUG]색상버튼 클릭");
@@ -349,9 +494,12 @@ namespace PaintBoard
                 penColor = DlgColor.Color;
                 UpdatePreviewPen(penColor);
 
+                if (currentPenMode == ToolMode.Brush)
+                    img = TintImage(texture, penColor);
             }
         }
 
+        // 전체 지우개 버튼 클릭
         private void BtnAllClear_Click(object sender, EventArgs e)
         {
             Console.WriteLine("[DEBUG]전체지우기버튼 클릭");
@@ -380,6 +528,7 @@ namespace PaintBoard
 
         }
 
+        // 지우개 버튼 클릭
         private void BtnEraser_Click(object sender, EventArgs e)
         {
             Console.WriteLine("[DEBUG]지우개버튼 클릭");
@@ -388,13 +537,7 @@ namespace PaintBoard
         }
 
 
-        private void BtnPen_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine("[DEBUG]펜버튼 클릭");
-            currentPenMode = ToolMode.Pen;
-            currentShapeMode = ShapeMode.None;
-        }
-
+        // 배경 선택 버튼
         private void BtnBackgroundColor_Click(object sender, EventArgs e)
         {
             if (DlgColor.ShowDialog() == DialogResult.OK)
@@ -412,6 +555,7 @@ namespace PaintBoard
             }
         }
 
+        // 되돌리기 버튼
         private void BtnUndo_Click(object sender, EventArgs e)
         {
             if (undoStack.Count > 0)
@@ -436,6 +580,7 @@ namespace PaintBoard
             }
         }
 
+        // 도형 그리기 버튼
         private void BtnRectangle_Click(object sender, EventArgs e)
         {
             Console.WriteLine("[DEBUG]네모버튼 클릭");
@@ -459,6 +604,7 @@ namespace PaintBoard
 
         }
 
+        // 트렉바 이벤트
         private void TrbPenSize_ValueChanged(object sender, EventArgs e)
         {
             penSize = TrbPenSize.Value;
@@ -472,19 +618,42 @@ namespace PaintBoard
             Console.WriteLine($"[DEBUG] EraserSize:{eraserSize}");
         }
 
+        // 펜 종류 선택 버튼
+        private void BtnPen_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("[DEBUG]펜버튼 클릭");
+            currentPenMode = ToolMode.Pen;
+            currentShapeMode = ShapeMode.None;
+        }
         private void BtnBrush_Click(object sender, EventArgs e)
         {
+            Console.WriteLine("[DEBUG]브러쉬버튼 클릭");
             currentPenMode = ToolMode.Brush;
+            currentShapeMode = ShapeMode.None;
+
+            if (img == null)
+            {
+                Console.WriteLine("이미지로딩안됨");
+            }
+            else Console.WriteLine("이미지로딩 됨");
         }
 
         private void BtnMarker_Click(object sender, EventArgs e)
         {
             currentPenMode = ToolMode.Marker;
+            currentShapeMode = ShapeMode.None;
         }
 
         private void BtnCrayon_Click(object sender, EventArgs e)
         {
             currentPenMode = ToolMode.Crayon;
+            currentShapeMode = ShapeMode.None;
+        }
+
+        private void BtnSpray_Click(object sender, EventArgs e)
+        {
+            currentPenMode = ToolMode.Spray;
+            currentShapeMode = ShapeMode.None;
         }
     }
 }
